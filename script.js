@@ -1,74 +1,89 @@
-//getter methods
-const numberBtn = document.querySelectorAll('.num');
-const inputText = document.querySelector('.input');
-const clearBtn =document.querySelector('.AC');
-const equalBtn = document.querySelector(".equal");
-const operatorBtn = document.querySelectorAll(".operator")
-const resultOf = document.querySelector('.result');
-const plusBtn = document.querySelector('.plus')
+// getter methods
+const NumberBtn = document.querySelectorAll('.num');
+const operator = document.querySelectorAll('.operator');
+const equalBtn = document.querySelector('.equal');
+const result = document.querySelector('.result');
+const displayInput = document.querySelector('.input');
 
-let num1 = 0;
-let num2 = 0;
-let selectedOperator = "";
+let num1 = null;
+let num2 = null;
+let firstOp = null;
+let PreviousOp = null
+let nextOp = null
 
-//update the inputText display
-numberBtn.forEach(btn =>{
-    btn.addEventListener('click', () => {
-        if(inputText.textContent === "0") inputText.textContent = "";
-        inputText.textContent += btn.textContent;
+
+
+NumberBtn.forEach(e => {
+    e.addEventListener('click', ()=>{
+        if (displayInput.textContent === "0" || displayInput.textContent == num1) {
+            displayInput.textContent = "";
+        }
+            displayInput.textContent += e.textContent
     })
-})
-
-//append the value depending on which button is clicked
-operatorBtn.forEach(btn =>{
-    btn.addEventListener('click', () => {
-        selectedOperator = btn.textContent
-        num1 = +inputText.textContent;
-        inputText.textContent = "";
-    })
-})
-
-
-//calculate the numbers depending on the SelectedOperator
-function operate(num1, num2 , selectedOperator){
-    num2 = +inputText.textContent
-    let result ="";
-
-    if(num1 == "") return alert("Please input number first");
-    if(num1 === "" || num2 === "" && selectedOperator === "/"){
-        return alert("Cannot be divided by 0")
-    }
-   if(num1){
-   switch(selectedOperator){
-    case "+":
-        inputText.textContent = result = +num1 + +num2;
-        resultOf.textContent = inputText.textContent
-        break;
-    case "-":
-        inputText.textContent = result = +num1 - +num2;
-        resultOf.textContent = inputText.textContent
-        break;
-    case "*":
-        inputText.textContent = result = +num1 * +num2;
-        resultOf.textContent = inputText.textContent
-        break;
-    case "/":
-        inputText.textContent = result = +num1 / +num2;
-        resultOf.textContent = inputText.textContent
-        break;
-   }
-   }
-   num1 = num2 = "";
-   return result
-}
-// when clicked it operate the funtions
-equalBtn.addEventListener('click', ( ) => {
-    operate(num1, num2, selectedOperator)
 });
 
 
-//clear display
-clearBtn.addEventListener('click', ()=>{
-    inputText.textContent = 0;
-    resultOf.textContent = "ans";
-})
+
+// set the value of the op to which button is pressed
+operator.forEach(element =>{
+    element.addEventListener('click',()=>{
+    
+        if(!firstOp){
+            firstOp= element.textContent;
+            PreviousOp = firstOp;
+            console.log(`this is first ${firstOp}`)
+            
+        }else {
+            nextOp = element.textContent
+            console.log(`this is second ${nextOp}`);
+        }
+        if(num1 === null) {
+            num1 = +displayInput.textContent;
+            displayInput.textContent = "";
+            return;
+        }
+        if(num1 !== null && num2 === null) {
+            num2 = +displayInput.textContent
+        }
+
+        if(num1 && num2){
+            firstOp = PreviousOp;
+            displayInput.textContent = operate(num1,num2,firstOp)
+            result.textContent  = displayInput.textContent + nextOp;
+            num1 =  +displayInput.textContent;
+            num2 = null;
+            PreviousOp = nextOp;
+            return;
+        }
+    })
+});
+
+function operate(num1, num2, firstOp){
+    switch(firstOp){
+        case "+":  
+            return add(num1, num2)
+        case "-":   
+            return subtract(num1, num2);
+        case "/":   
+            return divide(num1, num2);
+        case "*":   
+            return multiply(num1, num2);
+    }
+}
+
+function add(num1 , num2){
+    return num1 + num2
+}
+
+function subtract(num1 , num2){
+    return num1 - num2
+}
+
+function divide(num1 , num2){
+    if(num1 === 0 || num2 === 0) return alert("Are u dumb?");
+    return num1 / num2
+}
+
+function multiply(num1 , num2){
+    return  num1 * num2
+}
