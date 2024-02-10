@@ -7,7 +7,6 @@ const displayInput = document.querySelector('.input');
 const clearBtn = document.querySelector('.AC');
 const plusMinus = document.querySelector(".plus-minus")
 
-
 let num1 = null;
 let num2 = null;
 let firstOp = null;
@@ -17,7 +16,6 @@ let currentDisplay = null
 let isNegative = false
 let negative = null
 
-
 // clear the display Value
 clearBtn.addEventListener('click', ()=>{
     displayInput.textContent = 0;
@@ -25,6 +23,7 @@ clearBtn.addEventListener('click', ()=>{
     firstOp = nextOp = PreviousOp = num1 = num2 = null;
 })
 
+// convert the number to negative and positive
 plusMinus.addEventListener('click', ()=>{
     if(!isNegative){
         negative = -Math.abs(displayInput.textContent)
@@ -51,8 +50,6 @@ NumberBtn.forEach(e => {
     })
 });
 
-
-
 // set the value of the op to which button is pressed
 operator.forEach(element =>{
     element.addEventListener('click',()=>{
@@ -68,6 +65,7 @@ operator.forEach(element =>{
         }
         // checks if first number has number
         if(num1 === null) {
+            // checks if isNegative is  true
             if(isNegative){
                 num1 = negative;
             }else {
@@ -93,17 +91,20 @@ operator.forEach(element =>{
         }
     })
 });
+
 // calculates if all parameters is true
 equalBtn.addEventListener('click', ()=>{
     num2 = +currentDisplay;
-    displayInput.textContent = operate(num1, num2, firstOp);
-    result.textContent = displayInput.textContent ;
-    currentDisplay  = "";
-    num1 = +result.textContent;
-    firstOp = null;
-    num2 = null;
+    if(num1 && num2 && firstOp){
+        displayInput.textContent = operate(num1, num2, firstOp);
+        result.textContent = displayInput.textContent ;
+        currentDisplay  = "";
+        num1 = +result.textContent;
+        firstOp = null;
+        num2 = null;
+        return;
+    }
 })
-
 
 
 // a function do math calculations depending on the selected operators and returns a value;
