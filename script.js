@@ -5,6 +5,7 @@ const equalBtn = document.querySelector('.equal');
 const result = document.querySelector('.result');
 const displayInput = document.querySelector('.input');
 const clearBtn = document.querySelector('.AC');
+const plusMinus = document.querySelector(".plus-minus")
 
 
 let num1 = null;
@@ -13,24 +14,40 @@ let firstOp = null;
 let PreviousOp = null
 let nextOp = null
 let currentDisplay = null
+let isNegative = false
+let negative = null
 
 
 // clear the display Value
 clearBtn.addEventListener('click', ()=>{
-    displayInput.textContent = "";
+    displayInput.textContent = 0;
     result.textContent = "";
+    firstOp = nextOp = PreviousOp = num1 = num2 = null;
 })
+
+plusMinus.addEventListener('click', ()=>{
+    if(!isNegative){
+        negative = -Math.abs(displayInput.textContent)
+        displayInput.textContent = negative
+        isNegative = true;
+    }else {
+        const positive = Math.abs(displayInput.textContent)
+        displayInput.textContent = positive
+        isNegative = false;
+    }
+})
+
 
 // change and append the value whenever user clicked number  buttons
 NumberBtn.forEach(e => {
     e.addEventListener('click', ()=>{
         // if a value matches with the any of the conditions removes the value of displayInput
-        if (displayInput.textContent === "0" || displayInput.textContent == num1 || num1 === displayInput.text) {
+        if (displayInput.textContent == num1 || num1 === displayInput.textContent  || displayInput.textContent == "0" || displayInput.textContent == negative) {
             displayInput.textContent = "";
         }
         // append the button value to display value
             displayInput.textContent += e.textContent
-            currentDisplay = displayInput.textContent
+            currentDisplay = +displayInput.textContent
     })
 });
 
@@ -51,25 +68,28 @@ operator.forEach(element =>{
         }
         // checks if first number has number
         if(num1 === null) {
-            num1 = +currentDisplay;
+            if(isNegative){
+                num1 = negative;
+            }else {
+                num1 = currentDisplay;
+            }
             return;
         }else{
-            num2 = +currentDisplay;
+            if(isNegative){
+                num2 = negative;
+            }else {
+                num2 = currentDisplay;
+            }
         }
         // if both numbers is true proceed of calculating
-        if(num1 && num2 &&  element.textContent !== "="){
+        if(num2  &&  element.textContent !== "="){
             firstOp = PreviousOp;
             displayInput.textContent = operate(num1,num2,firstOp)
-            result.textContent  = displayInput.textContent + nextOp;
+            result.textContent = displayInput.textContent + nextOp;
             num1 =  +displayInput.textContent;
             num2 = null;
             PreviousOp = nextOp;
             return;
-        }
-
-        // if was calculate  by zero
-        if(num1 === 0 || num2 === 0 && element.textContent === "/" || element.textContent === "*") {
-            firstOp = PreviousOp = nextOp = null;
         }
     })
 });
@@ -77,9 +97,10 @@ operator.forEach(element =>{
 equalBtn.addEventListener('click', ()=>{
     num2 = +currentDisplay;
     displayInput.textContent = operate(num1, num2, firstOp);
-    result.textContent = displayInput.textContent;
+    result.textContent = displayInput.textContent ;
     currentDisplay  = "";
     num1 = +result.textContent;
+    firstOp = null;
     num2 = null;
 })
 
@@ -96,6 +117,8 @@ function operate(num1, num2, firstOp){
             return divide(num1, num2);
         case "*":   
             return multiply(num1, num2);
+        case "%": 
+            return modulo(num1, num2)
     }
 }
 
@@ -116,4 +139,8 @@ function divide(num1 , num2){
 
 function multiply(num1 , num2){
     return  num1 * num2
+}
+
+function modulo(num1, num2){
+    return (num1 % num2)
 }
