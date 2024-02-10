@@ -6,6 +6,7 @@ const result = document.querySelector('.result');
 const displayInput = document.querySelector('.input');
 const clearBtn = document.querySelector('.AC');
 const plusMinus = document.querySelector(".plus-minus")
+const dotBtn = document.querySelector(".dot");
 
 let num1 = null;
 let num2 = null;
@@ -15,12 +16,36 @@ let nextOp = null
 let currentDisplay = null
 let isNegative = false
 let negative = null
+let hasDot = false;
+
 
 // clear the display Value
 clearBtn.addEventListener('click', ()=>{
     displayInput.textContent = 0;
     result.textContent = "";
     firstOp = nextOp = PreviousOp = num1 = num2 = null;
+})
+
+
+dotBtn.addEventListener("click",()=>{
+
+    if(displayInput.textContent !== 0){
+        let array = displayInput.textContent.split(",");
+        array.push(".");
+        displayInput.textContent = array.join("");
+        console.log(displayInput.textContent)
+
+        for(let i = 0; i < array.length; i++){
+        
+            if(array[i] === "."){
+                dotBtn.disabled = true;
+                hasDot  = true;
+                array = [];
+            }else if(array[i] !== ".") {
+                dotBtn.disabled =false;
+                hasDot = false;
+        }}  
+    }
 })
 
 // convert the number to negative and positive
@@ -55,7 +80,7 @@ operator.forEach(element =>{
     element.addEventListener('click',()=>{
         // if firstOp is false append the button value then reassigned previous value
         if(!firstOp){
-            firstOp= element.textContent;
+            firstOp = element.textContent;
             PreviousOp = firstOp;
             console.log(`this is first ${firstOp}`)
         }else {
@@ -79,6 +104,8 @@ operator.forEach(element =>{
                 num2 = currentDisplay;
             }
         }
+        
+
         // if both numbers is true proceed of calculating
         if(num2  &&  element.textContent !== "="){
             firstOp = PreviousOp;
@@ -103,6 +130,9 @@ equalBtn.addEventListener('click', ()=>{
         firstOp = null;
         num2 = null;
         return;
+    }else{
+        alert("Complete the Number first!")
+        return 
     }
 })
 
@@ -126,11 +156,11 @@ function operate(num1, num2, firstOp){
 
 // functions that do math calculations
 function add(num1 , num2){
-    return num1 + num2
+    return (num1 + num2).toFixed(2)
 }
 
 function subtract(num1 , num2){
-    return num1 - num2
+    return (num1 - num2).toFixed(2)
 }
 
 function divide(num1 , num2){
@@ -139,9 +169,9 @@ function divide(num1 , num2){
 }
 
 function multiply(num1 , num2){
-    return  num1 * num2
+    return  (num1 * num2).toFixed(2)
 }
 
 function modulo(num1, num2){
-    return (num1 % num2)
+    return (num1 % num2).toFixed(2)
 }
