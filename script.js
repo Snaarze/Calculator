@@ -7,6 +7,7 @@ const displayInput = document.querySelector('.input');
 const clearBtn = document.querySelector('.AC');
 const plusMinus = document.querySelector(".plus-minus")
 const dotBtn = document.querySelector(".dot");
+const clear = document.querySelector('.clear')
 
 let num1 = null;
 let num2 = null;
@@ -17,6 +18,16 @@ let currentDisplay = null
 let isNegative = false
 let negative = null;
 let hasDots = false
+
+
+// clear one value on the end of the string
+clear.addEventListener('click', ()=>{
+    const arrayClear = displayInput.textContent.split("")
+    if(arrayClear.length !== null){
+        arrayClear.pop();
+    displayInput.textContent = arrayClear.join("");
+    }
+})
 
 // clear the display Value
 clearBtn.addEventListener('click', ()=>{
