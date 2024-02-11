@@ -57,7 +57,6 @@ plusMinus.addEventListener('click', ()=>{
     }
 })
 
-
 // change and append the value whenever user clicked number  buttons
 NumberBtn.forEach(e => {
     e.addEventListener('click', ()=>{
@@ -92,23 +91,18 @@ operator.forEach(element =>{
             if(isNegative){
                 num1 = negative;
             }else {
-                num1 = currentDisplay;
-                result.textContent = currentDisplay +  firstOp
+                num1 = currentDisplay; 
             }
+            result.textContent = num1 +  firstOp
             return;
         }else{
             if(isNegative){
                 num2 = negative;
-                
             }else {
-                num2 = currentDisplay;
-                result.textContent = displayInput.textContent + firstOp
+                num2 = currentDisplay;   
             }
+            result.textContent = displayInput.textContent + firstOp
         }
-
-        
-        
-
 
         // if both numbers is true proceed of calculating
         if(num1 && num2  &&  element.textContent !== "="){
@@ -120,8 +114,6 @@ operator.forEach(element =>{
             PreviousOp = nextOp;
             return;
         }
-
-        
     })
 });
 
@@ -142,7 +134,6 @@ equalBtn.addEventListener('click', ()=>{
     }
 })
 
-
 // a function do math calculations depending on the selected operators and returns a value;
 function operate(num1, num2, firstOp){
     switch(firstOp){
@@ -158,7 +149,6 @@ function operate(num1, num2, firstOp){
             return modulo(num1, num2)
     }
 }
-
 
 // functions that do math calculations
 function add(num1 , num2){
