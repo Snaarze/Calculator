@@ -15,36 +15,32 @@ let PreviousOp = null
 let nextOp = null
 let currentDisplay = null
 let isNegative = false
-let negative = null
-let hasDot = false;
-
+let negative = null;
+let hasDots = false
 
 // clear the display Value
 clearBtn.addEventListener('click', ()=>{
     displayInput.textContent = 0;
     result.textContent = "";
+    dotBtn.disabled =false;
     firstOp = nextOp = PreviousOp = num1 = num2 = null;
 })
 
-
+// checks if displayInput has dot
 dotBtn.addEventListener("click",()=>{
 
-    if(displayInput.textContent !== 0){
+    if (displayInput.textContent !== 0) {
         let array = displayInput.textContent.split(",");
-        array.push(".");
-        displayInput.textContent = array.join("");
-        console.log(displayInput.textContent)
-
-        for(let i = 0; i < array.length; i++){
-        
-            if(array[i] === "."){
-                dotBtn.disabled = true;
-                hasDot  = true;
-                array = [];
-            }else if(array[i] !== ".") {
-                dotBtn.disabled =false;
-                hasDot = false;
-        }}  
+        if (!hasDots) {
+            dotArray = array.push(".");
+            displayInput.textContent = array.join("");
+            hasDots = true;
+        } else {
+            if (displayInput.textContent.slice(-1) === ".") {
+                displayInput.textContent = displayInput.textContent.replace(".", "");
+                hasDots = false;
+            }
+        }   
     }
 })
 
@@ -78,6 +74,8 @@ NumberBtn.forEach(e => {
 // set the value of the op to which button is pressed
 operator.forEach(element =>{
     element.addEventListener('click',()=>{
+        hasDots =false;
+
         // if firstOp is false append the button value then reassigned previous value
         if(!firstOp){
             firstOp = element.textContent;
@@ -95,27 +93,35 @@ operator.forEach(element =>{
                 num1 = negative;
             }else {
                 num1 = currentDisplay;
+                result.textContent = currentDisplay +  firstOp
             }
             return;
         }else{
             if(isNegative){
                 num2 = negative;
+                
             }else {
                 num2 = currentDisplay;
+                result.textContent = displayInput.textContent + firstOp
             }
         }
+
+        
         
 
+
         // if both numbers is true proceed of calculating
-        if(num2  &&  element.textContent !== "="){
+        if(num1 && num2  &&  element.textContent !== "="){
             firstOp = PreviousOp;
             displayInput.textContent = operate(num1,num2,firstOp)
             result.textContent = displayInput.textContent + nextOp;
-            num1 =  +displayInput.textContent;
+            num1 =  currentDisplay = +displayInput.textContent;
             num2 = null;
             PreviousOp = nextOp;
             return;
         }
+
+        
     })
 });
 
@@ -127,7 +133,7 @@ equalBtn.addEventListener('click', ()=>{
         result.textContent = displayInput.textContent ;
         currentDisplay  = "";
         num1 = +result.textContent;
-        firstOp = null;
+        firstOp = nextOp = PreviousOp =  null;
         num2 = null;
         return;
     }else{
